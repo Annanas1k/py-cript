@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Algoritmul ADFGVX{% endblock %}
+
+{% block content %}
+<h2>Algoritmul ADFGVX - Criptare / Decriptare Pas cu Pas</h2>
+
+<!-- Criptare -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">Criptare</div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="plaintext" class="form-label">Text de intrare</label>
+                <textarea class="form-control" id="plaintext" name="plaintext" rows="3">{{ plaintext|default('') }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="poly_key" class="form-label">Cheie Polybius</label>
+                <input type="text" class="form-control" id="poly_key" name="poly_key" value="{{ poly_key|default('') }}">
+            </div>
+            <div class="mb-3">
+                <label for="transpo_key" class="form-label">Cheie Transpoziție</label>
+                <input type="text" class="form-control" id="transpo_key" name="transpo_key" value="{{ transpo_key|default('') }}">
+            </div>
+            <button type="submit" name="action" value="encrypt" class="btn btn-success">Criptează</button>
+        </form>
+
+        {% if steps_encrypt %}
+        <hr>
+        <h5>Pași Criptare:</h5>
+        <ol>
+            {% for step in steps_encrypt %}
+                <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+        <div class="mt-2">
+            <label class="form-label">Rezultat final:</label>
+            <textarea class="form-control" rows="2" readonly>{{ encrypted }}</textarea>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Decriptare -->
+<div class="card">
+    <div class="card-header bg-secondary text-white">Decriptare</div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="ciphertext" class="form-label">Text criptat</label>
+                <textarea class="form-control" id="ciphertext" name="ciphertext" rows="3">{{ ciphertext|default('') }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="poly_key2" class="form-label">Cheie Polybius</label>
+                <input type="text" class="form-control" id="poly_key2" name="poly_key" value="{{ poly_key|default('') }}">
+            </div>
+            <div class="mb-3">
+                <label for="transpo_key2" class="form-label">Cheie Transpoziție</label>
+                <input type="text" class="form-control" id="transpo_key2" name="transpo_key" value="{{ transpo_key|default('') }}">
+            </div>
+            <button type="submit" name="action" value="decrypt" class="btn btn-warning">Decriptează</button>
+        </form>
+
+        {% if steps_decrypt %}
+        <hr>
+        <h5>Pași Decriptare:</h5>
+        <ol>
+            {% for step in steps_decrypt %}
+                <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+        <div class="mt-2">
+            <label class="form-label">Rezultat final:</label>
+            <textarea class="form-control" rows="2" readonly>{{ decrypted }}</textarea>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
