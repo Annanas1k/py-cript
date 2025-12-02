@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Triple DES (3DES) EDE{% endblock %}
+
+{% block content %}
+<h2>Triple DES (3DES) - Mod EDE (Encrypt-Decrypt-Encrypt)</h2>
+
+<div class="card mb-4">
+    <div class="card-header bg-success text-white">Criptare / Decriptare 3DES</div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="plaintext" class="form-label">Text Clar (Hex)</label>
+                <textarea class="form-control" id="plaintext" name="plaintext" rows="2">{{ plaintext|default('') }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="ciphertext" class="form-label">Text Criptat (Hex)</label>
+                <textarea class="form-control" id="ciphertext" name="ciphertext" rows="2">{{ ciphertext|default('') }}</textarea>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="key1" class="form-label">Cheia 1 (K1)</label>
+                    <input type="text" class="form-control" id="key1" name="key1" value="{{ key1|default('AABBCCDDEEFF0011') }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="key2" class="form-label">Cheia 2 (K2)</label>
+                    <input type="text" class="form-control" id="key2" name="key2" value="{{ key2|default('2233445566778899') }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="key3" class="form-label">Cheia 3 (K3)</label>
+                    <input type="text" class="form-control" id="key3" name="key3" value="{{ key3|default('AABBCCDDEEFF0011') }}">
+                </div>
+            </div>
+            
+            <button type="submit" name="action" value="encrypt" class="btn btn-success">Criptează 3DES</button>
+            <button type="submit" name="action" value="decrypt" class="btn btn-warning">Decriptează 3DES</button>
+        </form>
+
+        {% if encrypted or decrypted %}
+        <div class="mt-4">
+            <label class="form-label fw-bold">Rezultat (Hex):</label>
+            <textarea class="form-control" rows="3" readonly>{{ encrypted or decrypted }}</textarea>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="alert alert-info" role="alert">
+    **Notă pentru Sarcina de Performanță:** Măsurarea timpului pentru fișiere mari (1MB) trebuie efectuată în **consola Python (CLI)** folosind funcția `triple_des_ede_operation` din backend, deoarece interfața web poate avea limitări de timp.
+</div>
+
+{% endblock %}

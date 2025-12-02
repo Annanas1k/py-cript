@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Atac Forță Brută DES{% endblock %}
+
+{% block content %}
+<h2>Atac Experimental: Forță Brută DES (16 Biți Necunoscuți)</h2>
+
+<div class="card mb-4">
+    <div class="card-header bg-danger text-white">Determinarea Cheii Secrete</div>
+    <div class="card-body">
+        <form method="POST">
+            <p>Se caută o cheie de 64 de biți unde 48 de biți sunt cunoscuți și 16 biți (marcați cu 'x') sunt necunoscuți.</p>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="plaintext" class="form-label">Text Clar Dat (1 Bloc Hex)</label>
+                    <input type="text" class="form-control" id="plaintext" name="plaintext" value="{{ target_p|default('1122334455667788') }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="ciphertext" class="form-label">Text Criptat Corespunzător (1 Bloc Hex)</label>
+                    <input type="text" class="form-control" id="ciphertext" name="ciphertext" value="{{ target_c|default('') }}">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="key_template" class="form-label">Șablon Cheie (64 de biți, folosiți 'x' pentru biții necunoscuți)</label>
+                <textarea class="form-control" id="key_template" name="key_template" rows="2">{{ key_template|default('1111111111111111111111111111111111111111xxxxxxxxxxxxxxxx0000000000000000') }}</textarea>
+                <div class="form-text">Asigurați-vă că șablonul este de 64 de caractere (0, 1 sau x) și conține exact 16 caractere 'x'.</div>
+            </div>
+
+            <button type="submit" name="action" value="brute_force" class="btn btn-danger">Începe Atacul Forță Brută</button>
+        </form>
+
+        {% if found_key is not none %}
+        <div class="mt-4">
+            <label class="form-label fw-bold">Rezultat Atac:</label>
+            {% if found_key != "Cheie negăsită" %}
+                <div class="alert alert-success">
+                    Cheie Găsită: **{{ found_key }}**
+                </div>
+                <p>
+                    Încercări necesare: **{{ attempts }}** (din 65536)<br>
+                    Timp de execuție: **{{ "%.4f"|format(time_taken) }}** secunde
+                </p>
+            {% else %}
+                <div class="alert alert-warning">
+                    **{{ found_key }}**. S-au parcurs {{ attempts }} încercări în {{ "%.4f"|format(time_taken) }} secunde.
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

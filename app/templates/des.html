@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Cifrul Bloc DES{% endblock %}
+
+{% block content %}
+<h2>Cifrul Bloc DES (Data Encryption Standard)</h2>
+
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">Criptare / Decriptare (Moduri ECB/CBC)</div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="plaintext" class="form-label">Text Clar (Hex)</label>
+                <textarea class="form-control" id="plaintext" name="plaintext" rows="2">{{ plaintext|default('') }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="ciphertext" class="form-label">Text Criptat (Hex)</label>
+                <textarea class="form-control" id="ciphertext" name="ciphertext" rows="2">{{ ciphertext|default('') }}</textarea>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="key" class="form-label">Cheie (16 Hex chars / 64 biți)</label>
+                    <input type="text" class="form-control" id="key" name="key" value="{{ key|default('AABBCCDDEEFF0011') }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="iv" class="form-label">IV (16 Hex chars - doar pentru CBC)</label>
+                    <input type="text" class="form-control" id="iv" name="iv" value="{{ iv|default('1234567890ABCDEF') }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="mode" class="form-label">Mod de Operare (Sarcina 3)</label>
+                    <select class="form-select" id="mode" name="mode">
+                        <option value="ecb" {% if mode == 'ecb' %}selected{% endif %}>ECB (Electronic Codebook)</option>
+                        <option value="cbc" {% if mode == 'cbc' %}selected{% endif %}>CBC (Cipher Block Chaining)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button type="submit" name="action" value="encrypt" class="btn btn-success">Criptează (ECB/CBC)</button>
+            <button type="submit" name="action" value="decrypt" class="btn btn-warning">Decriptează (ECB/CBC)</button>
+        </form>
+
+        {% if encrypted or decrypted %}
+        <div class="mt-4">
+            <label class="form-label fw-bold">Rezultat {{ "Criptat" if encrypted else "Decriptat" }} (Hex):</label>
+            <textarea class="form-control" rows="3" readonly>{{ encrypted or decrypted }}</textarea>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-danger text-white">Analiza Efectului de Avalanșă (Sarcina 2)</div>
+    <div class="card-body">
+        <form method="POST">
+             <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="avalanche_plaintext" class="form-label">Text Clar de Bază (1 bloc Hex)</label>
+                    <input type="text" class="form-control" id="avalanche_plaintext" name="avalanche_plaintext" value="1122334455667788">
+                </div>
+                <div class="col-md-6">
+                    <label for="avalanche_key" class="form-label">Cheie de Bază (Hex)</label>
+                    <input type="text" class="form-control" id="avalanche_key" name="avalanche_key" value="AABBCCDDEEFF0011">
+                </div>
+            </div>
+            <button type="submit" name="action" value="avalanche_test" class="btn btn-info text-white">Rulează Test Avalanșă</button>
+        </form>
+        {% if avalanche_logs %}
+        <div class="mt-4">
+            <label class="form-label fw-bold">Rezultate (ideal ~50% biți schimbați):</label>
+            <ul class="list-group">
+                {% for log in avalanche_logs %}
+                <li class="list-group-item">{{ log }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

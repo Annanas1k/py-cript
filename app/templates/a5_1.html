@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Algoritmul A5/1{% endblock %}
+
+{% block content %}
+<h2>Algoritmul A5/1</h2>
+
+<!-- Criptare -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">Criptare</div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="plaintext" class="form-label">Text de intrare</label>
+                <textarea class="form-control" id="plaintext" name="plaintext" rows="3">{{ plaintext|default('') }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="key" class="form-label">Cheie (binară ex: 101010...)</label>
+                <input type="text" class="form-control" id="key" name="key" value="{{ key|default('') }}">
+            </div>
+            <button type="submit" name="action" value="encrypt" class="btn btn-success">Criptează</button>
+        </form>
+        {% if encrypted %}
+        <div class="mt-3">
+            <label class="form-label">Rezultat:</label>
+            <textarea class="form-control" rows="2" readonly>{{ encrypted }}</textarea>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Decriptare -->
+<div class="card">
+    <div class="card-header bg-primary text-white">Decriptare</div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="ciphertext" class="form-label">Text criptat</label>
+                <textarea class="form-control" id="ciphertext" name="ciphertext" rows="3">{{ ciphertext|default('') }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="key2" class="form-label">Cheie (binară)</label>
+                <input type="text" class="form-control" id="key2" name="key2" value="{{ key|default('') }}">
+            </div>
+            <button type="submit" name="action" value="decrypt" class="btn btn-warning">Decriptează</button>
+        </form>
+        {% if decrypted %}
+        <div class="mt-3">
+            <label class="form-label">Rezultat:</label>
+            <textarea class="form-control" rows="2" readonly>{{ decrypted }}</textarea>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
